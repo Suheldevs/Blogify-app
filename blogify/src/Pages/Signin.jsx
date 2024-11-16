@@ -16,7 +16,7 @@ function Signin() {
   const onSubmit = async(formData) =>{
     setloading(true);
     setError(null);
-    if(!formData.username || !formData.email || !formData.password){
+    if(!formData.email || !formData.password){
       setloading(false);
       return setError('Please fill out all fields.');
     }
@@ -64,14 +64,7 @@ function Signin() {
   {Error}
 </Alert>
       )}
-          <div className=''>
-            <Label value='Your username'/>
-            <TextInput
-            type='text'
-            placeholder='Username'
-            {...register('username')}
-            />
-          </div>
+          
           <div className=''>
             <Label value='Your email'/>
             <TextInput
@@ -98,9 +91,9 @@ function Signin() {
           </Button>
         </form>
         <div className='flex gap-2 text-sm mt-5'>
-          <span>Have an account?</span>
-          <Link to='/sign-in' className='text-blue-500'>
-          Sign In
+          <span>Don't have an account?</span>
+          <Link to='/signup' className='text-blue-500'>
+          Sign Up
           </Link>
         </div>
      
