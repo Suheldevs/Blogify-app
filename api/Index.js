@@ -9,21 +9,17 @@ const app = express();
 
 app.use(express.json());
 
-
 mongoose.connect(process.env.MONGO)
-    .then(() => {
-        console.log('mongodb is connected!');
-    }).catch((err) => {
-        console.log(err)
-    });
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('Could not connect to MongoDB:', err));
 
 
 app.listen(3000, () => {
-    console.log('server is running on port 3000')
+    console.log('server is running on port 3000');
 })
 
-app.use('/api/user',userRoutes)
-app.use('/api/auth',authRoutes)
+app.use('/api/user',userRoutes);
+app.use('/api/auth',authRoutes);
 
 //middleware
 app.use((err, req, res, next)=>{
