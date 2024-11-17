@@ -1,12 +1,13 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {useForm} from 'react-hook-form';
 import Swal from 'sweetalert2';
 function Signin() {
 
   const [Error , setError] = useState(null);
   const [loading, setloading]= useState(false);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -21,7 +22,7 @@ function Signin() {
       return setError('Please fill out all fields.');
     }
     try{
-      const res = await fetch('/api/auth/signup',{
+      const res = await fetch('/api/auth/signin',{
         method:'POST',
         headers:{'Content-type':'application/json'},
         body:JSON.stringify(formData),
@@ -37,6 +38,7 @@ function Signin() {
         text: 'sign in successful.',
         confirmButtonText: 'OK'
       });
+      navigate('/');
     }
     catch(error){
       setError(error.message);
@@ -52,7 +54,7 @@ function Signin() {
             <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>Blogify</span>.com
           </div>
           <p className='mt-4 font-semibold '>
-            This is a blog website project. Created by Mohd suhel. You can sign up with email and password.
+            This is a blog website project. Created by Mohd suhel. You can sign in with email and password.
             And if you want this type of websites , contact me on <a href='mailto:mohdsuhel.dev@gmail.com' className='text-blue-500 hover:text-blue-700'>mohdsuhel.dev@gmail.com</a>.
           </p>
       </div>
