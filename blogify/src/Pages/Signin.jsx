@@ -3,10 +3,14 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {useForm} from 'react-hook-form';
 import Swal from 'sweetalert2';
+//redux
+import { useDispatch,useSelector } from 'react-redux';
+import { signinStart, signinSuccess,singFailure } from '../redux/user/userSlice';
+
 function Signin() {
 
-  const [Error , setError] = useState(null);
-  const [loading, setloading]= useState(false);
+  const {loading, error} = useSelector(state => state.user)
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
     register,
@@ -15,23 +19,23 @@ function Signin() {
     formState: { errors },
   } = useForm()
   const onSubmit = async(formData) =>{
-    setloading(true);
-    setError(null);
+
     if(!formData.email || !formData.password){
-      setloading(false);
-      return setError('Please fill out all fields.');
+      return dispatch(singFailure('Please fill all the fields'));
     }
     try{
+      dispatch(signinStart())
       const res = await fetch('/api/auth/signin',{
         method:'POST',
         headers:{'Content-type':'application/json'},
         body:JSON.stringify(formData),
       })
       const response = await res.json();
-      setloading(false);
       if(response.success === false){
-        return setError(response.message);
+        dispatch(singFailure(response.message));
       }
+      if(res.ok){
+        dispatch(signinSuccess(response));
       Swal.fire({
         icon: 'success',
         title: 'Success!',
@@ -40,9 +44,9 @@ function Signin() {
       });
       navigate('/');
     }
+  }
     catch(error){
-      setError(error.message);
-      setloading(false);
+    return  dispatch(singFailure(error.message));
     }
   }
   return (
@@ -61,9 +65,9 @@ function Signin() {
       {/* right */}
       <div className='flex-1'>
         <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
-        {Error && (
+        {error && (
         <Alert className='mb-2' color='failure'>
-  {Error}
+  {error}
 </Alert>
       )}
           
